@@ -1,0 +1,23 @@
+
+l
+<src/main/java/pro/eruslanov/showcase/ErrorsPresentation.java,1\5\154b2b7040e0e34798950ed19bb81740eaa7e421
+h
+8src/main/java/pro/eruslanov/showcase/TaskRepository.java,1\c\1c7084efd3be8bbc18b797e9c5b4c65542787dde
+9
+	http.http,e\d\ed8e9e4dc8c0591059b6f1a379f11b3163d3adec
+h
+8src/main/java/pro/eruslanov/showcase/NewTaskPayload.java,c\a\cadb01eb8226b2d7fc938929f4a57609b6255041
+^
+.src/main/java/pro/eruslanov/showcase/Task.java,b\1\b17dbccf5e820c2c76581eef7d7684421bdb33e4
+m
+=src/main/java/pro/eruslanov/showcase/ShowCaseApplication.java,1\3\13a0504d769e4dd7c3afb7789c302b7af3111f54
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+p
+@src/test/java/pro/eruslanov/showcase/TaskRestControllerTest.java,5\9\59375c7cb4863ea10eeb0139c9890af48aa68d47
+m
+=src/main/java/pro/eruslanov/showcase/InMemTaskRepository.java,0\1\01534d6ad5c56cf7220017d3daf07292355e3e94
+n
+>src/test/java/pro/eruslanov/showcase/TaskRestControllerIT.java,7\e\7e801a934e8d0db2ab3c3b15231764cc32e5c4fb
+l
+<src/main/java/pro/eruslanov/showcase/TaskRestController.java,1\5\15767f16630ce7c0e24e335cdd5cb9e543c6fbf4

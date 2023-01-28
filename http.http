@@ -1,0 +1,15 @@
+GET http://localhost:8189/api/v1/tasks
+
+###
+
+POST http://localhost:8189/api/v1/tasks
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "details": "third task"
+}
+
+###
+
+GET http://localhost:8189/api/v1/tasks/20bfe109-9bf2-447a-b990-6e8186e510b2
