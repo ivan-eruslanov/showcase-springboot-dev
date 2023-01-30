@@ -1,8 +1,10 @@
 package pro.eruslanov.showcase;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -18,7 +20,7 @@ public class TaskRestController {
     private final TaskRepository taskRepository;
     private final MessageSource messageSource;
 
-    public TaskRestController(TaskRepository taskRepository, MessageSource messageSource) {
+    public TaskRestController(@Qualifier("jdbcOperationTaskRepository") TaskRepository taskRepository, MessageSource messageSource) {
         this.taskRepository = taskRepository;
         this.messageSource = messageSource;
     }
@@ -31,6 +33,7 @@ public class TaskRestController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> handleCreateNewTask(
             @RequestBody NewTaskPayload payload,
             UriComponentsBuilder uriComponentsBuilder,
