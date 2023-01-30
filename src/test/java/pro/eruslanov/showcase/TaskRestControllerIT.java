@@ -10,10 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,7 +28,8 @@ class TaskRestControllerIT {
     @Test
     void handleGetAllTasks_ReturnsValidResponseEntity() throws Exception {
         // given
-        var requestBuilder = get("/api/v1/tasks");
+        var requestBuilder = get("/api/v1/tasks")
+                .with(httpBasic("user1", "password1"));
 
         // when
         this.mockMvc.perform(requestBuilder)
@@ -44,7 +42,7 @@ class TaskRestControllerIT {
                                     {
                                         "id": "96ef3ea2-9ef1-11ed-ad46-00155d174057",
                                         "details": "first task",
-                                        "completed": false                                                                                               
+                                        "completed": false                                                                                         
                                     },
                                     {
                                         "id": "9946a352-9ef1-11ed-9c87-00155d174057",
@@ -60,6 +58,7 @@ class TaskRestControllerIT {
     void handleCreateNewTask_PayloadIsValid_ReturnsValidResponseEntity() throws Exception {
         // given
         var requestBuilder = post("/api/v1/tasks")
+                .with(httpBasic("user2", "password2"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -88,6 +87,7 @@ class TaskRestControllerIT {
     void handleCreateNewTask_PayloadIsInvalid_ReturnsValidResponseEntity() throws Exception {
         // given
         var requestBuilder = post("/api/v1/tasks")
+                .with(httpBasic("user1", "password1"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                 .content("""

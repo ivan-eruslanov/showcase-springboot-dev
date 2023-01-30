@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,15 +27,17 @@ public class TaskRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> handleGetAllTasks() {
+    public ResponseEntity<List<Task>> handleGetAllTasks(
+            @AuthenticationPrincipal ApplicationUser user) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(this.taskRepository.findAll());
+                .body(this.taskRepository.findByApplicationUserId(user.id()));
     }
 
     @PostMapping
     @Transactional
     public ResponseEntity<?> handleCreateNewTask(
+            @AuthenticationPrincipal ApplicationUser user,
             @RequestBody NewTaskPayload payload,
             UriComponentsBuilder uriComponentsBuilder,
             Locale locale) {
@@ -47,7 +50,7 @@ public class TaskRestController {
                     .body(new ErrorsPresentation(
                             List.of(message)));
         } else {
-            var task = new Task(payload.details());
+            var task = new Task(payload.details(), user.id());
             this.taskRepository.save(task);
             return ResponseEntity.created(uriComponentsBuilder
                             .path("/api/v1/tasks/{taskId}")

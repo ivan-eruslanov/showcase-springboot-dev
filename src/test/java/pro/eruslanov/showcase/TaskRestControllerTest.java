@@ -36,12 +36,14 @@ class TaskRestControllerTest {
     @DisplayName("GET /api/v1/tasks возвращает HTTP-ответ со статусом 200 ОК и списком задач")
     void handleGetAllTasks_ReturnsValidResponseEntity() {
         // given
-        var tasks = List.of(new Task(UUID.randomUUID(), "first task", false),
-                new Task(UUID.randomUUID(), "second task", true));
-        doReturn(tasks).when(this.taskRepository).findAll();
+        var user = new ApplicationUser(UUID.randomUUID(), "user1", "password1");
+
+        var tasks = List.of(new Task(UUID.randomUUID(), "first task", false, user.id()),
+                new Task(UUID.randomUUID(), "second task", true, user.id()));
+        doReturn(tasks).when(this.taskRepository).findByApplicationUserId(user.id());
 
         // when
-        var responseEntity = this.controller.handleGetAllTasks();
+        var responseEntity = this.controller.handleGetAllTasks(user);
 
         // then
         assertNotNull(responseEntity);
@@ -54,10 +56,11 @@ class TaskRestControllerTest {
     @DisplayName("POST /api/v1/tasks возвращает HTTP-ответ со статусом 201 CREATED и создании задачи")
     void handleCreateNewTask_PayloadIsValid_ReturnsValidResponseEntity() {
         // given
+        var user = new ApplicationUser(UUID.randomUUID(), "user1", "password1");
         var details = "third task";
 
         // when
-        var responseEntity = this.controller.handleCreateNewTask(new NewTaskPayload(details),
+        var responseEntity = this.controller.handleCreateNewTask(user, new NewTaskPayload(details),
                 UriComponentsBuilder.fromUriString("http://localhost:8189"), Locale.ENGLISH);
 
         // then
@@ -68,6 +71,7 @@ class TaskRestControllerTest {
             assertNotNull(task.id());
             assertEquals(details, task.details());
             assertFalse(task.completed());
+            assertEquals(user.id(), task.applicationUserId());
 
             assertEquals(URI.create("http://localhost:8189/api/v1/tasks/" + task.id()),
                     responseEntity.getHeaders().getLocation());
@@ -84,6 +88,7 @@ class TaskRestControllerTest {
     @DisplayName("POST /api/v1/tasks возвращает HTTP-ответ со статусом 400 BAD_REQUEST")
     void handleCreateNewTask_PayloadIsInvalid_ReturnsValidResponseEntity() {
         // given
+        var user = new ApplicationUser(UUID.randomUUID(), "user1", "password1");
         var details = "    ";
         var locale = Locale.US;
         var errorMessage = "Details is empty";
@@ -92,7 +97,7 @@ class TaskRestControllerTest {
                 .getMessage("tasks.create.details.errors.not_set", new Object[0], locale);
 
         // when
-        var responseEntity = this.controller.handleCreateNewTask(new NewTaskPayload(details),
+        var responseEntity = this.controller.handleCreateNewTask(user, new NewTaskPayload(details),
                 UriComponentsBuilder.fromUriString("http://localhost:8189"), locale);
 
         // then
