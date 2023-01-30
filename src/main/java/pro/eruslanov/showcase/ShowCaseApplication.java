@@ -21,6 +21,8 @@ public class ShowCaseApplication {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .authorizeHttpRequests().anyRequest().authenticated()
+                .and()
                 .build();
     }
 }
